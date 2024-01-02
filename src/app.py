@@ -55,6 +55,18 @@ def get_character(people_id):
 
     return jsonify(results.serialize()), 200
 
+@app.route('/people', methods=['POST'])
+def post_character():
+    body = request.get_json()
+    character = People(name=body['name'], birth_year=body['birth_year'], gender=body['gender'], height=body['height'], skin_color=body['skin_color'], eye_color=body['eye_color'])
+    db.session.add(character)
+    db.session.commit()
+    response_body = {
+        'msg': 'Character has been created.'
+    }
+
+    return jsonify(response_body), 200
+
 @app.route('/planets', methods=['GET'])
 def get_planets():
     results = list(map(lambda user: user.serialize(), Planets.query.all()))
