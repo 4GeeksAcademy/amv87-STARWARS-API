@@ -70,16 +70,16 @@ class Planets(db.Model):
 class FavoritePlanets(db.Model):
     __tablename__ = 'favorite_planets'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User')
     planet_id = db.Column(db.Integer, db.ForeignKey('planets.id'), nullable=False)
-    planet = db.relationship('Planet')
+    planet = db.relationship('Planets')
 
     def __repr__(self):
         return '<FavoritePlanets %r>' % self.planet_id
     
     def serialize(self):
         return {
-            'id': self.id,
-            'planet': self.planet.serialize() if self.planet else None
+            'id': self.id
         }
+
