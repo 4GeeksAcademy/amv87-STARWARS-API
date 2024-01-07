@@ -88,11 +88,35 @@ def get_favorites():
 
     return jsonify(people, planets), 200
 
-@app.route('/favorite/people/<int:people_id>', methods=['POST'])
-def add_favorite_character(people_id):
+@app.route('/favorite/people', methods=['POST'])
+def add_favorite_character():
     body = request.get_json()
     character = FavoritePeople(user_id=body['user_id'], character_id=body['character_id'])
     db.session.add(character)
+    db.session.commit()
+    response_body = {
+        'msg': 'Favorite has been added.'
+    }
+
+    return jsonify(response_body), 200
+
+@app.route('/favorite/people', methods=['DELETE'])
+def delete_favorite_character():
+    body = request.get_json()
+    character = FavoritePeople(user_id=body['user_id'], character_id=body['character_id'])
+    db.session.delete(character)
+    db.session.commit()
+    response_body = {
+        'msg': 'Favorite has been deleted.'
+    }
+
+    return jsonify(response_body), 200
+
+@app.route('/favorite/planets', methods=['POST'])
+def add_favorite_planet():
+    body = request.get_json()
+    planet = FavoritePlanets(user_id=body['user_id'], planet_id=body['planet_id'])
+    db.session.add(planet)
     db.session.commit()
     response_body = {
         'msg': 'Favorite has been added.'
