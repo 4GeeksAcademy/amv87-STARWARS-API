@@ -103,6 +103,30 @@ def add_favorite_planet(user_id, planet_id):
 
     return jsonify(response_body), 201
 
+@app.route('/people', methods=['POST'])
+def create_character():
+    body = request.get_json()
+    character = People(name=body['name'], birth_year=body['birth_year'], gender=body['gender'], height=body['height'], skin_color=body['skin_color'], eye_color=body['eye_color'])
+    db.session.add(character)
+    db.session.commit()
+    response_body = {
+        'msg': 'New character has been created.'
+    }
+
+    return jsonify(response_body), 200
+
+@app.route('/planets', methods=['POST'])
+def create_planet():
+    body = request.get_json()
+    planet = Planets(name=body['name'], climate=body['climate'], population=body['population'], orbital_period=body['orbital_period'], rotation_period=body['rotation_period'], diameter=body['diameter'])
+    db.session.add(planet)
+    db.session.commit()
+    response_body = {
+        'msg': 'New planet has been created.'
+    }
+
+    return jsonify(response_body), 200
+
 @app.route('/users/<int:user_id>/favorites/people/<int:people_id>', methods=['DELETE'])
 def delete_favorite_character(user_id, people_id):
     delete_favorite = FavoritePeople.query.filter_by(user_id=user_id, character_id=people_id).first()
